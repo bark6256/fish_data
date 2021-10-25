@@ -63,7 +63,7 @@ test_target = pd.DataFrame(test_target)
 test_df = pd.concat((test_target, test_input), axis=1)
 
 # db 연결이 안되는듯 하다.
-engine = db.create_engine("mariadb+mariadbconnector://fish:fish1234@127.0.0.1/fishdb")
+engine = db.create_engine("mariadb+mariadbconnector://fish:fish1234@127.0.0.1:3306/fishdb")
 print('test')
 
 train_df.to_sql(name='train',con=engine, if_exists='replace',index=False)
