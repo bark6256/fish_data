@@ -2,7 +2,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pymysql
+import sqlalchemy
 from sqlalchemy import create_engine
+
 
 bream_length  = pd.read_csv('C:\\fish\\bream_length.csv', names=['길이'])
 bream_weight  = pd.read_csv('C:\\fish\\bream_weight.csv', names=['무게'])
@@ -32,7 +34,7 @@ fish_data = np.vstack((bream_data, smelt_data))
 
 index_data = np.arange(bream_length.size + smelt_length.size)
 np.random.shuffle(index_data)
-print(index_data)
+# print(index_data)
 
 train_input = fish_data[index_data[:35]]  # 훈련 데이터 (모델)
 train_target = fish_target[index_data[:35]] # 타겟 데이터 (모델)
@@ -51,11 +53,17 @@ test_target = fish_target[index_data[35:]] # 타겟 데이터 (검증)
 # plt.show()
 
 # 넘파이를 데이터프레임으로 변경
-train_input = pd.DataFrame(train_input)
-train_target = pd.DataFrame(train_target)
+train_input = pd.DataFrame(train_input, columns=['length','weight'])
+train_target = pd.DataFrame(train_target, columns=['targer'])
 train_data = pd.concat((train_target, train_input), axis=1)
+print(train_data)
 
 test_input = pd.DataFrame(test_input)
 test_target = pd.DataFrame(test_target)
 test_data = pd.concat((test_target, test_input), axis=1)
 
+db_connection_str = 'mysql+pymysql://fish:fish1234@localhost/fishdb'
+db_connection = create_engine(db_connection_str)
+conn = db_connection.connect()
+
+train_data.to_sql(name='train', con=db_connection, if_exists='append',index=False)
