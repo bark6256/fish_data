@@ -22,16 +22,28 @@ smelt_data = np.hstack((smelt_length, smelt_weight))
 # print("="*50)
 
 fish_target = np.concatenate((np.ones(bream_length.size), np.zeros(smelt_length.size)))
-print(fish_target)
+# print(fish_target)
 
 fish_data = np.vstack((bream_data, smelt_data))
 # print(fish_data)
 # print("="*50)
 
+index_data = np.arange(bream_length.size + smelt_length.size)
+np.random.shuffle(index_data)
+print(index_data)
+
+train_input = fish_data[index_data[:35]]  # 훈련 데이터 (모델)
+train_target = fish_target[index_data[:35]] # 타겟 데이터 (모델)
+
+test_input = fish_data[index_data[35:]]  # 훈련 데이터 (검증)
+test_target = fish_target[index_data[35:]] # 타겟 데이터 (검증)
+
+print(train_input[:5,])
+print(train_target[:5,])
+
 
 # plt.scatter 는 데이터 프레임은 안된다. 넘파이는 된다.
-plt.scatter(bream_data[:,0], bream_data[:,1])
-plt.scatter(smelt_data[:,0], smelt_data[:,1])
+plt.scatter(train_input[:,0], train_input[:,1])
 plt.xlabel("length")
 plt.ylabel("weight")
 plt.show()
