@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pymysql
+from sqlalchemy import create_engine
 
 bream_length  = pd.read_csv('C:\\fish\\bream_length.csv', names=['길이'])
 bream_weight  = pd.read_csv('C:\\fish\\bream_weight.csv', names=['무게'])
@@ -38,12 +40,22 @@ train_target = fish_target[index_data[:35]] # 타겟 데이터 (모델)
 test_input = fish_data[index_data[35:]]  # 훈련 데이터 (검증)
 test_target = fish_target[index_data[35:]] # 타겟 데이터 (검증)
 
-print(train_input[:5,])
-print(train_target[:5,])
+# print(train_input[:5,])
+# print(train_target[:5,])
 
 
 # plt.scatter 는 데이터 프레임은 안된다. 넘파이는 된다.
-plt.scatter(train_input[:,0], train_input[:,1])
-plt.xlabel("length")
-plt.ylabel("weight")
-plt.show()
+# plt.scatter(train_input[:,0], train_input[:,1])
+# plt.xlabel("length")
+# plt.ylabel("weight")
+# plt.show()
+
+# 넘파이를 데이터프레임으로 변경
+train_input = pd.DataFrame(train_input)
+train_target = pd.DataFrame(train_target)
+train_data = pd.concat((train_target, train_input), axis=1)
+
+test_input = pd.DataFrame(test_input)
+test_target = pd.DataFrame(test_target)
+test_data = pd.concat((test_target, test_input), axis=1)
+
