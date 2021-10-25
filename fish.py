@@ -46,10 +46,11 @@ test_target = fish_target[index_data[35:]] # 타겟 데이터 (검증)
 
 
 # plt.scatter 는 데이터 프레임은 안된다. 넘파이는 된다.
-# plt.scatter(train_input[:,0], train_input[:,1])
-# plt.xlabel("length")
-# plt.ylabel("weight")
-# plt.show()
+plt.scatter(train_input[:,0], train_input[:,1])
+plt.scatter(test_input[:,0], test_input[:,1])
+plt.xlabel("length")
+plt.ylabel("weight")
+plt.show()
 
 # 넘파이를 데이터프레임으로 변경
 train_input = pd.DataFrame(train_input, columns=['length','weight'])
