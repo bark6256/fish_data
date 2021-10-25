@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import pymysql
-import sqlalchemy
+import sqlalchemy as db
 from sqlalchemy import create_engine
 
 
@@ -55,15 +54,15 @@ test_target = fish_target[index_data[35:]] # 타겟 데이터 (검증)
 # 넘파이를 데이터프레임으로 변경
 train_input = pd.DataFrame(train_input, columns=['length','weight'])
 train_target = pd.DataFrame(train_target, columns=['targer'])
-train_data = pd.concat((train_target, train_input), axis=1)
-print(train_data)
+train_df = pd.concat((train_target, train_input), axis=1)
+print(train_df)
 
 test_input = pd.DataFrame(test_input)
 test_target = pd.DataFrame(test_target)
-test_data = pd.concat((test_target, test_input), axis=1)
+test_df = pd.concat((test_target, test_input), axis=1)
 
-db_connection_str = 'mysql+pymysql://fish:fish1234@localhost/fishdb'
-db_connection = create_engine(db_connection_str)
-conn = db_connection.connect()
+# db 연결이 안되는듯 하다.
+engine = db.create_engine("mariadb+mariadbconnector://fish:fish1234@127.0.0.1/fishdb")
+print('test')
 
-train_data.to_sql(name='train', con=db_connection, if_exists='append',index=False)
+train_df.to_sql(name='train',con=engine, if_exists='replace',index=False)
