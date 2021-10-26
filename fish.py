@@ -46,24 +46,27 @@ test_target = fish_target[index_data[35:]] # 타겟 데이터 (검증)
 
 
 # plt.scatter 는 데이터 프레임은 안된다. 넘파이는 된다.
-plt.scatter(train_input[:,0], train_input[:,1])
-plt.scatter(test_input[:,0], test_input[:,1])
-plt.xlabel("length")
-plt.ylabel("weight")
-plt.show()
+# plt.scatter(train_input[:,0], train_input[:,1])
+# plt.scatter(test_input[:,0], test_input[:,1])
+# plt.xlabel("length")
+# plt.ylabel("weight")
+# plt.show()
 
 # 넘파이를 데이터프레임으로 변경
-train_input = pd.DataFrame(train_input, columns=['length','weight'])
-train_target = pd.DataFrame(train_target, columns=['targer'])
+train_input = pd.DataFrame(train_input, columns=['train_length','train_weight'])
+train_target = pd.DataFrame(train_target, columns=['train_targer'])
 train_df = pd.concat((train_target, train_input), axis=1)
 print(train_df)
 
-test_input = pd.DataFrame(test_input)
-test_target = pd.DataFrame(test_target)
+test_input = pd.DataFrame(test_input, columns=['test_length','test_weight'])
+test_target = pd.DataFrame(test_target, columns=['test_targer'])
 test_df = pd.concat((test_target, test_input), axis=1)
 
-# db 연결이 안되는듯 하다.
-engine = db.create_engine("mariadb+mariadbconnector://fish:fish1234@127.0.0.1:3306/fishdb")
-print('test')
+# db 연결이 안되는듯 하다. -> pip install mariadb 완료하니 정상적으로 작동된다.
+
+
+engine = db.create_engine("mariadb+mariadbconnector://python:python1234@127.0.0.1:3306/pythondb")
+
 
 train_df.to_sql(name='train',con=engine, if_exists='replace',index=False)
+test_df.to_sql(name='test',con=engine, if_exists='replace',index=False)
